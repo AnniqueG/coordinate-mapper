@@ -65,10 +65,10 @@ def label_points(points, distance_threshold, red_count_threshold):
 
         if close_points_count >= red_count_threshold:
             points[i].set_rgb((255, 0, 0))  # Assign red color
-            print("REDDDD")
+            
         elif close_points_count >= red_count_threshold // 2:
             points[i].set_rgb((255, 255, 0))  # Assign yellow color
-            print("YELLOWWWWWWWW")
+            
         else:
             points[i].set_rgb((0, 255, 0))  # Assign green color
 
@@ -86,10 +86,10 @@ def main():
     print("Distance between point1 and point2:", distance)
 
     # Write points to a CSV file
-    points.append(point1)
-    points.append(point2)
-    write_points_to_csv(points, 'new_points.csv')
-    print("Points written to CSV.")
+    #points.append(point1)
+    #points.append(point2)
+    #write_points_to_csv(points, 'new_points.csv')
+    #print("Points written to CSV.")
 
     # Label the points
     distance_threshold = 0.0001
