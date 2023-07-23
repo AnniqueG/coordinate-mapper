@@ -39,7 +39,7 @@ def write_points_to_csv(points, file_path):
         for point in points:
             rgb = point.rgb
             color_label = get_color_label(rgb)  # Get color label based on RGB value
-            csv_writer.writerow([point.x, f"{rgb} {color_label}"])
+            csv_writer.writerow([point.x, point.y, f"{rgb} {color_label}"])
 
 def get_color_label(rgb):
     if rgb == (255, 0, 0):
