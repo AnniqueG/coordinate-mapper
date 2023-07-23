@@ -1,7 +1,11 @@
 import csv
+import os
 import math
+import folium
 
-file_path = "C:/Users/ricke/UNI/csi3140/project/coordinates.csv"
+file_name = "coordinates.csv"
+current_directory = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(current_directory, file_name)
 
 class Point2D:
     def __init__(self, x, y):
@@ -39,7 +43,7 @@ def write_points_to_csv(points, file_path):
         for point in points:
             rgb = point.rgb
             color_label = get_color_label(rgb)  # Get color label based on RGB value
-            csv_writer.writerow([point.x, point.y, f"{rgb} {color_label}"])
+            csv_writer.writerow([point.x,point.y, f"{rgb} {color_label}"])
 
 def get_color_label(rgb):
     if rgb == (255, 0, 0):
@@ -65,7 +69,7 @@ def label_points(points, distance_threshold, red_count_threshold):
 
         if close_points_count >= red_count_threshold:
             points[i].set_rgb((255, 0, 0))  # Assign red color
-            
+           
         elif close_points_count >= red_count_threshold // 2:
             points[i].set_rgb((255, 255, 0))  # Assign yellow color
             
@@ -99,6 +103,32 @@ def main():
     # Write labeled points to CSV
     write_points_to_csv(labeled_points, 'labeled_points.csv')
     print("Labeled points written to CSV.")
+
+    # Creating map
+    city_map = folium.Map(location=[points[0].y, points[0].x], zoom_start=14)
+
+
+    # Adding markers to the map
+    for point in labeled_points:
+        lat = point.y
+        lon = point.x
+        color = get_color_label(point.rgb)
+        x_coord = point.x  # x-coordinate of the point
+        y_coord = point.y  # y-coordinate of the point
+
+        # Creating a marker with the specified color and add it to the map
+        marker = folium.CircleMarker(location=[lat, lon], radius=5, color=color, fill=True, fill_color=color)
+
+        # Attaching a label to the marker displaying the x and y coordinates
+        label = f"X: {x_coord:.6f}, Y: {y_coord:.6f}"
+        popup = folium.Popup(label, parse_html=True)
+        marker.add_child(popup)
+        marker.add_to(city_map)
+
+    # Save the map as an HTML file
+    city_map.save('city_map.html')
+    print("City map generated.")
+
 
 # Execute the main function
 if __name__ == '__main__':
